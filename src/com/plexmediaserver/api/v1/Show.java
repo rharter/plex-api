@@ -7,7 +7,6 @@ import org.xml.sax.Attributes;
 
 import android.sax.Element;
 import android.sax.EndElementListener;
-import android.sax.EndTextElementListener;
 import android.sax.StartElementListener;
 
 public class Show {
