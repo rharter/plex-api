@@ -1,32 +1,21 @@
 package com.plexmediaserver.api.v1;
 
-import java.util.*;
-import java.io.*;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
-import org.xml.sax.SAXException;
+import java.io.IOException;
+import java.util.List;
 
-import android.location.Location;
-import android.net.Uri;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.DefaultHttpClient;
+
 import android.sax.RootElement;
-import android.util.Xml;
 import android.util.Log;
+import android.util.Xml;
 
 public class PlexAPI {
 	
-	private List<Server> mServers;
-	
-	public static List<Section> getSections() {
-		Server server = new Server();
-		HttpGet request = new HttpGet("http://" + server.getHost() + ":" + server.getPort() + "/library/sections");
+	public static List<Section> getSections(String address) {
+		HttpGet request = new HttpGet(address + "/library/sections");
 		HttpClient client = new DefaultHttpClient();
 		
 		HttpResponse response = null;
@@ -50,9 +39,8 @@ public class PlexAPI {
 		return sections;
 	}
 	
-	public static List<Movie> getAllMoviesForSection(int section) {
-		Server server = new Server();
-		HttpGet request = new HttpGet(server.getAddress() + "/library/sections/" + section + "/all");
+	public static List<Movie> getAllMoviesForSection(String address, int section) {
+		HttpGet request = new HttpGet(address + "/library/sections/" + section + "/all");
 		HttpClient client = new DefaultHttpClient();
 		
 		HttpResponse response = null;
@@ -75,9 +63,8 @@ public class PlexAPI {
 		return movies;
 	}
 	
-	public static List<Show> getAllShowsForSection(int section) {
-		Server server = new Server();
-		HttpGet request = new HttpGet(server.getAddress() +	"/library/sections/" + section + "/all");
+	public static List<Show> getAllShowsForSection(String address, int section) {
+		HttpGet request = new HttpGet(address +	"/library/sections/" + section + "/all");
 		HttpClient client = new DefaultHttpClient();
 		
 		HttpResponse response = null;
@@ -100,9 +87,8 @@ public class PlexAPI {
 		return shows;
 	}
 	
-	public static List<Season> getSeasonsForShow(int show) {
-		Server server = new Server();
-		HttpGet request = new HttpGet(server.getAddress() + "/library/metadata/" + show + "/children");
+	public static List<Season> getSeasonsForShow(String address, int show) {
+		HttpGet request = new HttpGet(address + "/library/metadata/" + show + "/children");
 		HttpClient client = new DefaultHttpClient();
 		
 		HttpResponse response = null;
@@ -124,9 +110,8 @@ public class PlexAPI {
 		return seasons;
 	}
 	
-	public static List<Episode> getEpisodesForSeason(int season) {
-		Server server = new Server();
-		HttpGet request = new HttpGet(server.getAddress() + "/library/metadata/" + season + "/children");
+	public static List<Episode> getEpisodesForSeason(String address, int season) {
+		HttpGet request = new HttpGet(address + "/library/metadata/" + season + "/children");
 		HttpClient client = new DefaultHttpClient();
 		
 		HttpResponse response = null;
@@ -148,27 +133,5 @@ public class PlexAPI {
 		Log.d("PlexAPI", "Got Episodes: " + episodes.toString());
 		
 		return episodes;
-	}
-	
-	public static class Server {
-		private String mHost;
-		private int mPort;
-		
-		public Server() {
-			mHost = "192.168.1.8";
-			mPort = 32400;
-		}
-		
-		public String getHost() {
-			return mHost;
-		}
-		
-		public int getPort() {
-			return mPort;
-		}
-		
-		public String getAddress() {
-			return "http://" + mHost + ":" + mPort;
-		}
 	}
 }

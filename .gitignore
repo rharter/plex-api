@@ -1,2 +1,3 @@
-build
-*~
+bin/*
+gen/*
+.DS_STORE
